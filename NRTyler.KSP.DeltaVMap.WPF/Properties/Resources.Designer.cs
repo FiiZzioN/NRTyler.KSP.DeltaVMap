@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NRTyler.KSP.DeltaVMap.Properties
+namespace NRTyler.KSP.DeltaVMap.WPF.Properties
 {
 
 
@@ -44,7 +44,7 @@ namespace NRTyler.KSP.DeltaVMap.Properties
             {
                 if ((resourceMan == null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NRTyler.KSP.DeltaVMap.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NRTyler.KSP.DeltaVMap.WPF.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

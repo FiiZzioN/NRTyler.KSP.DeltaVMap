@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace NRTyler.KSP.DeltaVMap
+namespace NRTyler.KSP.DeltaVMap.WPF
 {
     /// <summary>
     /// Interaction logic for App.xaml

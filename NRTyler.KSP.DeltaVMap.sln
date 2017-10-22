@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRTyler.KSP.DeltaVMap", "NRTyler.KSP.DeltaVMap\NRTyler.KSP.DeltaVMap.csproj", "{D4F68A33-DCF8-459A-A62F-B854F9B7B0A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRTyler.KSP.DeltaVMap.WPF", "NRTyler.KSP.DeltaVMap.WPF\NRTyler.KSP.DeltaVMap.WPF.csproj", "{D33738C0-A730-42BE-B1C3-656E93F119B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRTyler.KSP.DeltaVMap.Core", "NRTyler.KSP.DeltaVMap.Core\NRTyler.KSP.DeltaVMap.Core.csproj", "{C6F8EB5B-A7B8-4798-ABC5-34827BEADDA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{48B3D2C7-BB6D-4E40-B748-2B2368A614C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRTyler.KSP.DeltaVMap.Core.Tests", "NRTyler.KSP.DeltaVMap.Core.Tests\NRTyler.KSP.DeltaVMap.Core.Tests.csproj", "{EE1BEA8B-3372-41A2-BEA4-E12EEA4F4F58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRTyler.KSP.DeltaVMap.WPF.Tests", "NRTyler.KSP.DeltaVMap.WPF.Tests\NRTyler.KSP.DeltaVMap.WPF.Tests.csproj", "{7F722051-102E-4847-AF0C-7329F689EF34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,13 +19,29 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D4F68A33-DCF8-459A-A62F-B854F9B7B0A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4F68A33-DCF8-459A-A62F-B854F9B7B0A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4F68A33-DCF8-459A-A62F-B854F9B7B0A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4F68A33-DCF8-459A-A62F-B854F9B7B0A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D33738C0-A730-42BE-B1C3-656E93F119B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D33738C0-A730-42BE-B1C3-656E93F119B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D33738C0-A730-42BE-B1C3-656E93F119B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D33738C0-A730-42BE-B1C3-656E93F119B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6F8EB5B-A7B8-4798-ABC5-34827BEADDA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6F8EB5B-A7B8-4798-ABC5-34827BEADDA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6F8EB5B-A7B8-4798-ABC5-34827BEADDA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6F8EB5B-A7B8-4798-ABC5-34827BEADDA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE1BEA8B-3372-41A2-BEA4-E12EEA4F4F58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE1BEA8B-3372-41A2-BEA4-E12EEA4F4F58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE1BEA8B-3372-41A2-BEA4-E12EEA4F4F58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE1BEA8B-3372-41A2-BEA4-E12EEA4F4F58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F722051-102E-4847-AF0C-7329F689EF34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F722051-102E-4847-AF0C-7329F689EF34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F722051-102E-4847-AF0C-7329F689EF34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F722051-102E-4847-AF0C-7329F689EF34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE1BEA8B-3372-41A2-BEA4-E12EEA4F4F58} = {48B3D2C7-BB6D-4E40-B748-2B2368A614C8}
+		{7F722051-102E-4847-AF0C-7329F689EF34} = {48B3D2C7-BB6D-4E40-B748-2B2368A614C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B23F90A3-9B9B-4AF7-B410-A09F7199C88D}

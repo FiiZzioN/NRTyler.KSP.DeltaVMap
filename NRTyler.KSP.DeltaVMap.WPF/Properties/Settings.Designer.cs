@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NRTyler.KSP.DeltaVMap.Properties
+namespace NRTyler.KSP.DeltaVMap.WPF.Properties
 {
 
 
