@@ -1,12 +1,12 @@
-﻿// ************************************************************************
+﻿// ***********************************************************************
 // Assembly         : NRTyler.KSP.DeltaVMap.Core
-// 
+//
 // Author           : Nicholas Tyler
 // Created          : 10-14-2017
-// 
+//
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 10-14-2017
-// 
+// Last Modified On : 10-22-2017
+//
 // License          : MIT License
 // ***********************************************************************
 
@@ -43,10 +43,10 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         private bool isHomeWorld;
         private bool hasAtmosphere;
         private bool canUseJets;
-        private bool hasMoons;
-        private int numberOfMoons;
+        private bool hasOrbitingBodies;
+        private int numberOfOrbitingBodies;
         private CelestialBody host;
-        private List<CelestialBody> moons;
+        private List<CelestialBody> orbitingBodies;
 
         #endregion
 
@@ -148,41 +148,42 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         }
 
         /// <summary>
-        /// Gets value indicating whether this <see cref="CelestialBody"/> has any moons.
+        /// Gets a value indicating whether there are any other bodies that orbit this <see cref="CelestialBody"/>.
         /// </summary>
-        public virtual bool HasMoons
+        public virtual bool HasOrbitingBodies
         {
             get
             {
-                HasMoons = Moons.Any();
-                return this.hasMoons;
+                HasOrbitingBodies = OrbitingBodies.Any();
+                return this.hasOrbitingBodies;
             }
             private set
             {
-                this.hasMoons = value;
-                OnPropertyChanged(nameof(HasMoons));
+                this.hasOrbitingBodies = value;
+                OnPropertyChanged(nameof(HasOrbitingBodies));
             }
         }
 
         /// <summary>
-        /// Gets the number of moons that orbit this <see cref="CelestialBody"/>.
+        /// Gets the number of other bodies that orbit this <see cref="CelestialBody"/>.
         /// </summary>
-        public virtual int NumberOfMoons
+        public virtual int NumberOfOrbitingBodies
         {
             get
             {
-                NumberOfMoons = Moons.Count;
-                return this.numberOfMoons;
+                NumberOfOrbitingBodies = OrbitingBodies.Count;
+                return this.numberOfOrbitingBodies;
             }
             private set
             {
-                this.numberOfMoons = value;
-                OnPropertyChanged(nameof(NumberOfMoons));
+                this.numberOfOrbitingBodies = value;
+                OnPropertyChanged(nameof(NumberOfOrbitingBodies));
             }
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="CelestialBody"/> that this <see cref="CelestialBody"/> is orbiting.
+        /// Gets or sets the <see cref="CelestialBody"/>, also known as a 
+        /// star, that this <see cref="CelestialBody"/> is orbiting.
         /// </summary>
         public virtual CelestialBody Host
         {
@@ -197,57 +198,65 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="List{T}"/> of moons that are orbiting this <see cref="CelestialBody"/>.
+        /// Gets or sets the <see cref="List{T}"/> of other bodies that orbit this <see cref="CelestialBody"/>.
         /// </summary>
-        public virtual List<CelestialBody> Moons
+        public virtual List<CelestialBody> OrbitingBodies
         {
             get
             {
-                EnsureMoonsInstantiation();
-                return this.moons;
+                // Make sure we receive something.
+                EnsureInstantiation();
+
+                return this.orbitingBodies;
             }
             set
             {
-                // Make sure we have something to add to.
-                EnsureMoonsInstantiation();
+                // Make sure we can modify something.
+                EnsureInstantiation();
 
-                this.moons = value;
+                this.orbitingBodies = value;
 
-                ModifyMoonItems();
-                OnPropertyChanged(nameof(Moons));
+                ModifyRelevantItems();
+                OnPropertyChanged(nameof(OrbitingBodies));
             }
         }
 
         #endregion
 
+        #region Methods
+
         /// <summary>
-        /// Makes sure that 'Moons' has a <see cref="List{T}"/> instantiated before trying to access it.
+        /// Makes sure that 'OrbitingBodies' has a <see cref="List{T}"/> instantiated before trying to access it.
         /// </summary>
-        protected virtual void EnsureMoonsInstantiation()
+        protected virtual void EnsureInstantiation()
         {
-            // If 'moons' isn't null, then we just use the List that's already there.
-            // Otherwise, we instantiate a new List for it to use.
-            Moons = this.moons ?? new List<CelestialBody>();
+            if (OrbitingBodies == null)
+            {
+                OrbitingBodies = new List<CelestialBody>();
+            }
         }
 
         /// <summary>
-        /// Updates other items should the <see cref="List{T}"/> of moons be modified.
+        /// Updates other relevant items should the <see cref="List{T}"/> of orbiting bodies be modified.
         /// </summary>
-        protected virtual void ModifyMoonItems()
+        protected virtual void ModifyRelevantItems()
         {
-            // Everything in here is pretty self-explanatory...
-            if (Moons.Any())
+            // If there are any bodies in the list, then this CelestialBody obviously has moon(s).
+            // If it doesn't have any in the list, then it clearly has no moon(s).
+            if (OrbitingBodies.Any())
             {
-                HasMoons = true;
+                HasOrbitingBodies = true;
             }
-            else if(!Moons.Any())
+            else if (!OrbitingBodies.Any())
             {
-                HasMoons = false;
+                HasOrbitingBodies = false;
             }
 
-            if (NumberOfMoons != Moons.Count)
+            // Make sure the number of moons has been updated. Since this method is called when 
+            // the 'Moons' property has been modified.
+            if (NumberOfOrbitingBodies != OrbitingBodies.Count)
             {
-                NumberOfMoons = Moons.Count;
+                NumberOfOrbitingBodies = OrbitingBodies.Count;
             }
         }
 
@@ -257,31 +266,99 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// </summary>
         protected virtual void SetValuesIfStar()
         {
-            Host          = this;
-            HasMoons      = true;
+            Host = this;
             HasAtmosphere = true;
+            HasOrbitingBodies = true;
 
-            IsPlanet    = false;
-            CanUseJets  = false;
+            IsPlanet = false;
+            CanUseJets = false;
             IsHomeWorld = false;
 
-            // Development Exception!
+            #if !DEBUG
             throw new NotImplementedException
                 ("You have to add all of the other Celestial Bodies to the moons list before continuing!");
+            #endif
 
-            foreach (var celestialBody in Moons)
+            if (OrbitingBodies.Count <= 0)
+            {
+                return;
+            }
+            foreach (var celestialBody in OrbitingBodies)
             {
                 // Since this CelestialBody is now the star, it makes itself the host of every 
                 // other CelestialBody an makes sure to set their "IsStar" flag is false.
-                celestialBody.Host   = this;
+                celestialBody.Host = this;
                 celestialBody.IsStar = false;
 
-                if (celestialBody.Moons.Contains(this))
+                if (celestialBody.OrbitingBodies.Contains(this))
                 {
-                    celestialBody.Moons.Remove(this);
+                    celestialBody.OrbitingBodies.Remove(this);
                 }
             }
         }
+
+        /// <summary>
+        /// Adds the specified celestialBodies to the <see cref="OrbitingBodies" /><see cref="List{T}" />.
+        /// This is done using a user specified approvalMethod to ensure that only valid bodies that meet
+        /// the required criteria can be added to the <see cref="List{T}" />.
+        /// </summary>
+        /// <param name="approvalMethod">
+        /// The logic that determines whether a body can be added to the 
+        /// <see cref="OrbitingBodies"/> <see cref="List{T}"/>
+        /// </param>
+        /// <param name="celestialBodies">The moons to add.</param>
+        protected virtual void AddCelestialBodies(Predicate<CelestialBody[]> approvalMethod, params CelestialBody[] celestialBodies)
+        {
+            approvalMethod(celestialBodies);
+        }
+
+        /// <summary>
+        /// Contains logic that only allows planets to be added 
+        /// to the <see cref="OrbitingBodies"/> <see cref="List{T}"/>.
+        /// </summary>
+        /// <param name="celestialBodies">The celestial bodies to validate.</param>
+        protected virtual void AddPlanets(CelestialBody[] celestialBodies)
+        {
+            // Only a star can have planets.
+            if (!IsStar)
+            {
+                return;
+            }
+
+            foreach (var celestialBody in celestialBodies)
+            {
+                // Ensure it's a planet and duplicates aren't added.
+                if (celestialBody.IsPlanet && !OrbitingBodies.Contains(celestialBody))
+                {
+                    OrbitingBodies.Add(celestialBody);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Contains logic that only allows moons to be added 
+        /// to the <see cref="OrbitingBodies"/> <see cref="List{T}"/>.
+        /// </summary>
+        /// <param name="celestialBodies">The celestial bodies to validate.</param>
+        protected virtual void AddMoons(CelestialBody[] celestialBodies)
+        {
+            // A star can't have moons.
+            if (IsStar)
+            {
+                return;
+            }
+
+            foreach (var celestialBody in celestialBodies)
+            {
+                // Ensure it's a moon and duplicates aren't added.
+                if (!celestialBody.IsPlanet && !OrbitingBodies.Contains(celestialBody))
+                {
+                    OrbitingBodies.Add(celestialBody);
+                }
+            }
+        } 
+
+        #endregion
 
         #region INotifyPropertyChanged Members
 
