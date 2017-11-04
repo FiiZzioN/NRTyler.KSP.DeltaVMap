@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C6F8EB5B-A7B8-4798-ABC5-34827BEADDA4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NRTyler.KSP.DeltaVMap.Core</RootNamespace>
-    <AssemblyName>NRTyler.KSP.DeltaVMap.Core</AssemblyName>
+    <ProjectGuid>{823C8DDC-69BB-45FD-9AA7-396B48C6C00C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TestAid</RootNamespace>
+    <AssemblyName>TestAid</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,12 +35,8 @@
     <Reference Include="NRTyler.CodeLibrary">
       <HintPath>..\..\NRTyler.CodeLibrary\NRTyler.CodeLibrary\bin\Debug\NRTyler.CodeLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="NRTyler.KSP.Common">
-      <HintPath>..\..\NRTyler.KSP.Utilities\NRTyler.KSP.Common\bin\Debug\NRTyler.KSP.Common.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,26 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\BodyType.cs" />
-    <Compile Include="Models\DataProviders\Orbit.cs" />
-    <Compile Include="Models\DataProviders\SubwayStep.cs" />
-    <Compile Include="Enums\StepID.cs" />
-    <Compile Include="EventArgs\BodyLoadedEventArgs.cs" />
-    <Compile Include="Models\DataControllers\BodyImplementer.cs" />
-    <Compile Include="Models\DataProviders\CelestialBody.cs" />
-    <Compile Include="Models\ApplicationSettings.cs" />
-    <Compile Include="Models\DataProviders\EllipticalOrbit.cs" />
-    <Compile Include="Models\DataProviders\Intercept.cs" />
-    <Compile Include="Models\DataProviders\LineInformation.cs" />
-    <Compile Include="Models\DataProviders\SolarSystem.cs" />
-    <Compile Include="Models\DataProviders\SubwayLine.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ApplicationSettingsRepository.cs" />
-    <Compile Include="Repositories\CelestialBodyRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Abstracts\" />
-    <Folder Include="Interfaces\" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NRTyler.KSP.DeltaVMap.Core\NRTyler.KSP.DeltaVMap.Core.csproj">
+      <Project>{c6f8eb5b-a7b8-4798-abc5-34827beadda4}</Project>
+      <Name>NRTyler.KSP.DeltaVMap.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

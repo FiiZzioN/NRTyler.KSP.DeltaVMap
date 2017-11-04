@@ -5,7 +5,7 @@
 // Created          : 10-14-2017
 //
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 10-22-2017
+// Last Modified On : 11-04-2017
 //
 // License          : MIT License
 // ***********************************************************************
@@ -15,7 +15,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using NRTyler.CodeLibrary.Annotations;
+using NRTyler.KSP.DeltaVMap.Core.Enums;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
 {
@@ -24,8 +26,8 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
     /// and their stars that can be used on a delta-v plot.
     /// </summary>
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
-    [Serializable]
-    public class CelestialBody : INotifyPropertyChanged
+    [DataContract(Name = "CelestialBody")]
+    public class CelestialBody : INotifyPropertyChanged//, IXmlSerializable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CelestialBody"/> class.
@@ -38,8 +40,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         #region Fields
 
         private string name;
-        private bool isStar;
-        private bool isPlanet;
+        private BodyType bodyType;
         private bool isHomeWorld;
         private bool hasAtmosphere;
         private bool canUseJets;
@@ -55,48 +56,36 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// <summary>
         /// Gets or sets the name of this <see cref="CelestialBody"/>.
         /// </summary>
+        [DataMember]
         public virtual string Name
         {
             get { return this.name; }
             set
             {
+                if (String.IsNullOrWhiteSpace(value)) return;
+
                 this.name = value;
                 OnPropertyChanged(nameof(Name));
             }
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="CelestialBody"/> is a star. If this 
-        /// value is <see langword="false"/>, it should be assumed that this <see cref="CelestialBody"/> 
-        /// is either a planet or a moon.
+        /// Gets or sets whether this <see cref="CelestialBody"/> is a Star, Planet, or Moon.
         /// </summary>
-        public bool IsStar
+        [DataMember]
+        public BodyType BodyType
         {
-            get { return this.isStar; }
+            get { return this.bodyType; }
             set
             {
-                // If this CelestialBody is a star, certain values must be changed.
-                if (value)
+                // If the body is a star, there are certain values that must be changed.
+                if (value == BodyType.Star)
                 {
                     SetValuesIfStar();
                 }
 
-                this.isStar = value;
-                OnPropertyChanged(nameof(IsStar));
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="CelestialBody"/> is a planet. If this value 
-        /// is <see langword="false"/>, it should be assumed that this <see cref="CelestialBody"/> is a moon.
-        /// </summary>
-        public virtual bool IsPlanet
-        {
-            get { return this.isPlanet; }
-            set
-            {
-                this.isPlanet = value; 
-                OnPropertyChanged(nameof(IsPlanet));
+                this.bodyType = value;
+                OnPropertyChanged(nameof(BodyType));
             }
         }
 
@@ -104,6 +93,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// Gets or sets a value indicating whether this <see cref="CelestialBody"/> is where the player's primary 
         /// base of operations is located. In short, this is where you launch your rockets from.
         /// </summary>
+        [DataMember]
         public virtual bool IsHomeWorld
         {
             get { return this.isHomeWorld; }
@@ -117,6 +107,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="CelestialBody"/> has an atmosphere.
         /// </summary>
+        [DataMember]
         public virtual bool HasAtmosphere
         {
             get { return this.hasAtmosphere; }
@@ -131,6 +122,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// Gets or sets a value indicating whether this <see cref="CelestialBody"/> has an 
         /// atmosphere that also allows the use of jet engines.
         /// </summary>
+        [DataMember]
         public virtual bool CanUseJets
         {
             get { return this.canUseJets; }
@@ -150,6 +142,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// <summary>
         /// Gets a value indicating whether there are any other bodies that orbit this <see cref="CelestialBody"/>.
         /// </summary>
+        [DataMember]
         public virtual bool HasOrbitingBodies
         {
             get
@@ -167,6 +160,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// <summary>
         /// Gets the number of other bodies that orbit this <see cref="CelestialBody"/>.
         /// </summary>
+        [DataMember]
         public virtual int NumberOfOrbitingBodies
         {
             get
@@ -185,6 +179,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// Gets or sets the <see cref="CelestialBody"/>, also known as a 
         /// star, that this <see cref="CelestialBody"/> is orbiting.
         /// </summary>
+        //[DataMember]
         public virtual CelestialBody Host
         {
             get { return this.host; }
@@ -200,23 +195,18 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// <summary>
         /// Gets or sets the <see cref="List{T}"/> of other bodies that orbit this <see cref="CelestialBody"/>.
         /// </summary>
+        [DataMember]
         public virtual List<CelestialBody> OrbitingBodies
         {
             get
             {
-                // Make sure we receive something.
-                EnsureInstantiation();
-
-                return this.orbitingBodies;
+                return this.orbitingBodies ?? (this.orbitingBodies = new List<CelestialBody>());
             }
-            set
+            private set
             {
-                // Make sure we can modify something.
-                EnsureInstantiation();
-
                 this.orbitingBodies = value;
 
-                ModifyRelevantItems();
+                UpdateOrbitingBodiesInfo();
                 OnPropertyChanged(nameof(OrbitingBodies));
             }
         }
@@ -226,20 +216,9 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         #region Methods
 
         /// <summary>
-        /// Makes sure that 'OrbitingBodies' has a <see cref="List{T}"/> instantiated before trying to access it.
-        /// </summary>
-        protected virtual void EnsureInstantiation()
-        {
-            if (OrbitingBodies == null)
-            {
-                OrbitingBodies = new List<CelestialBody>();
-            }
-        }
-
-        /// <summary>
         /// Updates other relevant items should the <see cref="List{T}"/> of orbiting bodies be modified.
         /// </summary>
-        protected virtual void ModifyRelevantItems()
+        protected virtual void UpdateOrbitingBodiesInfo()
         {
             // If there are any bodies in the list, then this CelestialBody obviously has moon(s).
             // If it doesn't have any in the list, then it clearly has no moon(s).
@@ -247,7 +226,8 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
             {
                 HasOrbitingBodies = true;
             }
-            else if (!OrbitingBodies.Any())
+
+            if (!OrbitingBodies.Any())
             {
                 HasOrbitingBodies = false;
             }
@@ -266,14 +246,13 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// </summary>
         protected virtual void SetValuesIfStar()
         {
-            Host = this;
-            HasAtmosphere = true;
+            Host              = this;
+            HasAtmosphere     = true;
             HasOrbitingBodies = true;
+            CanUseJets        = false;
+            IsHomeWorld       = false;
 
-            IsPlanet = false;
-            CanUseJets = false;
-            IsHomeWorld = false;
-
+            /*
             #if !DEBUG
             throw new NotImplementedException
                 ("You have to add all of the other Celestial Bodies to the moons list before continuing!");
@@ -286,49 +265,43 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
             foreach (var celestialBody in OrbitingBodies)
             {
                 // Since this CelestialBody is now the star, it makes itself the host of every 
-                // other CelestialBody an makes sure to set their "IsStar" flag is false.
+                // other CelestialBody and makes sure to set their "IsStar" flag is false.
                 celestialBody.Host = this;
-                celestialBody.IsStar = false;
+                celestialBody.BodyType = BodyType.Planet;
 
                 if (celestialBody.OrbitingBodies.Contains(this))
                 {
                     celestialBody.OrbitingBodies.Remove(this);
                 }
             }
+            */
         }
+        
+        #endregion
 
-        /// <summary>
-        /// Adds the specified celestialBodies to the <see cref="OrbitingBodies" /><see cref="List{T}" />.
-        /// This is done using a user specified approvalMethod to ensure that only valid bodies that meet
-        /// the required criteria can be added to the <see cref="List{T}" />.
-        /// </summary>
-        /// <param name="approvalMethod">
-        /// The logic that determines whether a body can be added to the 
-        /// <see cref="OrbitingBodies"/> <see cref="List{T}"/>
-        /// </param>
-        /// <param name="celestialBodies">The moons to add.</param>
-        protected virtual void AddCelestialBodies(Predicate<CelestialBody[]> approvalMethod, params CelestialBody[] celestialBodies)
-        {
-            approvalMethod(celestialBodies);
-        }
 
         /// <summary>
         /// Contains logic that only allows planets to be added 
         /// to the <see cref="OrbitingBodies"/> <see cref="List{T}"/>.
         /// </summary>
         /// <param name="celestialBodies">The celestial bodies to validate.</param>
-        protected virtual void AddPlanets(CelestialBody[] celestialBodies)
+        public virtual void AddPlanets(params CelestialBody[] celestialBodies)
         {
             // Only a star can have planets.
-            if (!IsStar)
-            {
-                return;
-            }
+            if (BodyType != BodyType.Star) return;
 
             foreach (var celestialBody in celestialBodies)
             {
-                // Ensure it's a planet and duplicates aren't added.
-                if (celestialBody.IsPlanet && !OrbitingBodies.Contains(celestialBody))
+                // These values must be opposite of what they are now for the body being evaluated to pass.
+                var isPlanet = false;
+                var isDuplicate = true;
+
+                // Ensure it's a planet and that it's not already on the "OrbitingBodies" list.
+                if (celestialBody.BodyType == BodyType.Planet) isPlanet = true;
+                if (!OrbitingBodies.Contains(celestialBody)) isDuplicate = false;
+
+                // Must be a planet and not a duplicate.
+                if (isPlanet && !isDuplicate)
                 {
                     OrbitingBodies.Add(celestialBody);
                 }
@@ -340,25 +313,28 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// to the <see cref="OrbitingBodies"/> <see cref="List{T}"/>.
         /// </summary>
         /// <param name="celestialBodies">The celestial bodies to validate.</param>
-        protected virtual void AddMoons(CelestialBody[] celestialBodies)
+        public virtual void AddMoons(params CelestialBody[] celestialBodies)
         {
             // A star can't have moons.
-            if (IsStar)
-            {
-                return;
-            }
+            if (BodyType == BodyType.Star) return;
 
             foreach (var celestialBody in celestialBodies)
             {
-                // Ensure it's a moon and duplicates aren't added.
-                if (!celestialBody.IsPlanet && !OrbitingBodies.Contains(celestialBody))
+                // These values must be opposite of what they are now for the body being evaluated to pass.
+                var isMoon = false;
+                var isDuplicate = true;
+
+                // Ensure it's a moon and that it's not already on the "OrbitingBodies" list.
+                if (celestialBody.BodyType == BodyType.Moon) isMoon = true;
+                if (!OrbitingBodies.Contains(celestialBody)) isDuplicate = false;
+
+                // Must be a moon and not a duplicate.
+                if (isMoon && !isDuplicate) 
                 {
                     OrbitingBodies.Add(celestialBody);
                 }
             }
-        } 
-
-        #endregion
+        }
 
         #region INotifyPropertyChanged Members
 
@@ -377,6 +353,6 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
+        #endregion        
     }
 }
