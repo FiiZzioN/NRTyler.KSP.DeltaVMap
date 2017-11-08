@@ -1,9 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// ***********************************************************************
+// Assembly         : TestAid
+//
+// Author           : Nicholas Tyler
+// Created          : 10-27-2017
+//
+// Last Modified By : Nicholas Tyler
+// Last Modified On : 11-04-2017
+//
+// License          : MIT License
+// ***********************************************************************
+
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NRTyler.CodeLibrary.Extensions;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
 using NRTyler.KSP.DeltaVMap.Core.Models;
@@ -16,55 +24,48 @@ namespace TestAid
     {
         private static void Main()
         {
-            var settings = new ApplicationSettings();
-            var APPrepo  = new ApplicationSettingsRepository(settings);
+            var body = Generate();
 
-            var appPath       = $"{settings.SettingsLocation}/Settings.xml";
-            var appFileStream = File.OpenRead(appPath);
+            var settings   = new ApplicationSettings();
+            var stream     = File.OpenWrite($"{settings.CelestialBodyLocation}/{body.Name.ToTitleCase()}.xml");
+            var repository = new CelestialBodyRepository();
 
-            Generation(settings);
-            
-            //Console.WriteLine(APPrepo.Deserialize(appFileStream).CelestialBodyLocation);
+            repository.Serialize(stream, body);
+            Console.WriteLine("Done");
         }
 
-        private static void Generation(ApplicationSettings settings)
+        private static CelestialBody Generate()
         {
-            var star = new CelestialBody
+            var kerbin = new CelestialBody
             {
-                Name = "kerbol",
-                BodyType = BodyType.Star,
-                IsHomeWorld = false,
+                Name          = "Kerbin",
+                BodyType      = BodyType.Planet,
+                IsHomeWorld   = true,
                 HasAtmosphere = true,
-                CanUseJets = false,
+                CanUseJets    = true,
             };
 
-            var planet = new CelestialBody
+            var mun = new CelestialBody()
             {
-                Name = "Kerbin",
-                BodyType = BodyType.Planet,
-                IsHomeWorld = true,
-                HasAtmosphere = true,
-                CanUseJets = true,
+                Name          = "Mun",
+                BodyType      = BodyType.Moon,
+                IsHomeWorld   = false,
+                HasAtmosphere = false,
+                CanUseJets    = false,
             };
 
-            CelestialBody[] arr = new CelestialBody[] {planet};
-
-
-            star.AddPlanets(arr);
-
-            var cbPath = $"{settings.CelestialBodyLocation}/{star.Name.ToTitleCase()}.xml";
-            //var appPath = $"{settings.SettingsLocation}/Settings.xml";
-
-            var cbFileStream = File.OpenWrite(cbPath);
-            //var appFileStream = File.OpenWrite(appPath);
-
-            using (cbFileStream)
+            var minmus = new CelestialBody()
             {
-                //var APPrepo = new ApplicationSettingsRepository(settings);
-                var cbRepository = new CelestialBodyRepository();
+                Name          = "Minmus",
+                BodyType      = BodyType.Moon,
+                IsHomeWorld   = false,
+                HasAtmosphere = false,
+                CanUseJets    = false,
+            };
 
-                cbRepository.Serialize(cbFileStream, star);
-            }
+            kerbin.AddMoons(mun, minmus);
+
+            return kerbin;
         }
     }
 }

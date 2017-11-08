@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\BodyType.cs" />
+    <Compile Include="Models\DataProviders\Landing.cs" />
     <Compile Include="Models\DataProviders\Orbit.cs" />
     <Compile Include="Models\DataProviders\SubwayStep.cs" />
     <Compile Include="Enums\StepID.cs" />

@@ -134,7 +134,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
             Moon.IsHomeWorld = true;
             Assert.IsTrue(Moon.IsHomeWorld);
 
-            // Our suits how incredible insulation!
+            // Our suits have incredible insulation!
             Star.IsHomeWorld = true;
             Assert.IsTrue(Star.IsHomeWorld);
         }

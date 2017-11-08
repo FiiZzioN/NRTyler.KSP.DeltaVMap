@@ -1,12 +1,12 @@
-﻿// ************************************************************************
+﻿// ***********************************************************************
 // Assembly         : NRTyler.KSP.DeltaVMap.Core
-// 
+//
 // Author           : Nicholas Tyler
 // Created          : 10-30-2017
-// 
+//
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 10-30-2017
-// 
+// Last Modified On : 11-08-2017
+//
 // License          : MIT License
 // ***********************************************************************
 
@@ -23,36 +23,40 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
     /// A base class that defines specific information about a given step on the <see cref="SubwayLine"/>.
     /// </summary>
     [Serializable]
-    public class SubwayStep :INotifyPropertyChanged
+    public abstract class SubwayStep : INotifyPropertyChanged
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubwayStep"/> class.
+        /// Initializes a new instance of the <see cref="SubwayStep" /> class.
         /// </summary>
-        protected SubwayStep() : this("Undefined")
+        /// <param name="target">The <see cref="CelestialBody"/> that this information is dedicated to.</param>
+        protected SubwayStep(CelestialBody target) : this(target, "Undefined")
         {
 
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubwayStep"/> class.
+        /// Initializes a new instance of the <see cref="SubwayStep" /> class.
         /// </summary>
-        /// <param name="name">The name of this specific <see cref="SubwayStep"/>.</param>
-        public SubwayStep(string name)
+        /// <param name="target">The <see cref="CelestialBody"/> that this information is dedicated to.</param>
+        /// <param name="name">The name of this specific <see cref="SubwayStep" />.</param>
+        protected SubwayStep(CelestialBody target, string name)
         {
-            Name = name;
+            Name   = String.IsNullOrWhiteSpace(name) ? "Invalid Name" : name;
+            Target = target;
             Initialize();
         }
 
         #region Fields and Properties
 
-        protected string name;
-        protected StepID stepID;
-        protected Dictionary<string, int> energyRequired;
+        private string name;
+        private CelestialBody target;
+        private StepID stepID;
+        private Dictionary<string, int> energyRequired;
 
         /// <summary>
         /// Gets or sets the name of this specific <see cref="SubwayStep"/>.
         /// </summary>
-        protected string Name
+        public string Name
         {
             get { return this.name; }
             set
@@ -65,10 +69,23 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="CelestialBody"/> you're trying to get to.
+        /// </summary>
+        public CelestialBody Target
+        {
+            get { return this.target; }
+            set
+            {
+                this.target = value; 
+                OnPropertyChanged(nameof(Target));
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the <see cref="Enums.StepID"/> that shows 
         /// where you're currently at on the <see cref="SubwayLine"/>.
         /// </summary>
-        public virtual StepID StepID
+        public StepID StepID
         {
             get { return this.stepID; }
             set
@@ -93,7 +110,6 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
             }
         }
 
-
         #endregion
 
         #region Methods
@@ -102,26 +118,40 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// Grants the ability to set all three possible energy required values at once. 
         /// </summary>
         /// <param name="minimum">The minimum amount of energy required to get to your destination.</param>
-        /// <param name="average">The average amount of energy required to get to your destination.</param>
         /// <param name="maximum">The maximum amount of energy required to get to your destination.</param>
-        public virtual void SetEnergyRequired(int minimum, int average, int maximum)
+        public virtual void SetEnergyRequired(int minimum, int maximum)
         {
             EnergyRequired["Minimum"] = minimum;
-            EnergyRequired["Average"] = average;
             EnergyRequired["Maximum"] = maximum;
+
+            EnergyRequired["Average"] = GetAverage();
+
         }
 
         /// <summary>
         /// Should the energy required to reach a given destination not have a large deviation, there's no 
-        /// need to have a range of values to display. While you enter in the average amount of energy required 
+        /// need to have a range of values to display. While you enter in the amount of energy required 
         /// to reach the destination, all other values are set to zero to represent this fact.
         /// </summary>
-        /// <param name="average">The average amount of energy required to get to your destination.</param>
-        public virtual void SetEnergyRequired(int average)
+        /// <param name="energy">The amount of energy required to get to your destination.</param>
+        public virtual void SetEnergyRequired(int energy)
         {
             EnergyRequired["Minimum"] = 0;
-            EnergyRequired["Average"] = average;
             EnergyRequired["Maximum"] = 0;
+
+            EnergyRequired["Average"] = energy;
+        }
+
+        /// <summary>
+        /// Gets the average amount of deltaV required to reach the targeted destination.
+        /// </summary>
+        /// <returns>The average amount of deltaV required to reach the targeted destination.</returns>
+        protected virtual int GetAverage()
+        {
+            var minimum = EnergyRequired["Minimum"];
+            var maximum = EnergyRequired["Maximum"];
+
+            return ((minimum + maximum) / 2);
         }
 
         /// <summary>

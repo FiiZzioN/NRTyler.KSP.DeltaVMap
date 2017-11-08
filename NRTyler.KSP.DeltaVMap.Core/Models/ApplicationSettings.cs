@@ -13,6 +13,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using NRTyler.CodeLibrary.Annotations;
 using NRTyler.CodeLibrary.Extensions;
@@ -31,7 +32,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models
         /// <summary>
         /// Gets the current directory that this program is located in.
         /// </summary>
-        [XmlElement("ApplicationDirectory", typeof(string))]
+        [DataMember]
         public string CurrentDirectory { get; set; } = Environment.CurrentDirectory;
 
         private string settingsLocation;
@@ -40,7 +41,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models
         /// <summary>
         /// Gets or sets the directory where the setting XML files for this application are located.
         /// </summary>
-        [XmlElement("SettingsFileDirectory", typeof(string))]
+        [DataMember]
         public string SettingsLocation
         {
             get { return this.settingsLocation; }
@@ -61,7 +62,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models
         /// <summary>
         /// Gets or sets the directory where the <see cref="CelestialBody"/> XML files are located.
         /// </summary>
-        [XmlElement("CelestialBodyDirectory", typeof(string))]
+        [DataMember]
         public string CelestialBodyLocation
         {
             get { return this.celestialBodyLocation; }

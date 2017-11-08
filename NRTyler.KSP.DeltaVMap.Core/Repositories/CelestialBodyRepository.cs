@@ -35,6 +35,8 @@ namespace NRTyler.KSP.DeltaVMap.Core.Repositories
         /// </summary>
         /// <param name="stream">The <see cref="T:System.IO.Stream" /> to the specified location and what <see cref="T:System.IO.FileMode" /> it's using.</param>
         /// <param name="obj">The <see cref="T:System.Object" /> being serialized.</param>
+        /// <exception cref="ArgumentNullException">stream - The stream being used can't be null!</exception>
+        /// <exception cref="ArgumentNullException">obj - The object being serialized can't be null!</exception>
         public override void Serialize(Stream stream, CelestialBody obj)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream), "The stream being used can't be null!");

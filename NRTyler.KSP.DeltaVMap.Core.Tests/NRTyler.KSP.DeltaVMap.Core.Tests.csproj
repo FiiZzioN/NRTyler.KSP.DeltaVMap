@@ -56,7 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\DataProviders\CelestialBodyTests.cs" />
+    <Compile Include="Models\DataProviders\LandingTests.cs" />
+    <Compile Include="Models\DataProviders\OrbitTests.cs" />
+    <Compile Include="Models\DataProviders\SubwayStepTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BodyInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

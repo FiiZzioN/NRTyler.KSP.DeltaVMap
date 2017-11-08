@@ -24,11 +24,11 @@ namespace NRTyler.KSP.DeltaVMap.Core.Enums
         [StringLabel("Landing")]
         Landing = 0,
 
-        [StringLabel("Low Orbit")]
-        LowOrbit = 1,        
+        [StringLabel("Orbit")]
+        Orbit = 1,        
 
         [StringLabel("Elliptical Orbit")]
-        EllipticalCapture = 2,
+        EllipticalOrbit = 2,
 
         [StringLabel("Intercept")]
         Intercept = 3,

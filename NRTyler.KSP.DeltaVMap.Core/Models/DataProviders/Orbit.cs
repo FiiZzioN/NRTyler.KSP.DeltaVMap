@@ -1,17 +1,18 @@
-﻿// ************************************************************************
+﻿// ***********************************************************************
 // Assembly         : NRTyler.KSP.DeltaVMap.Core
-// 
+//
 // Author           : Nicholas Tyler
 // Created          : 10-30-2017
-// 
+//
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 10-30-2017
-// 
+// Last Modified On : 11-04-2017
+//
 // License          : MIT License
 // ***********************************************************************
 
 using System;
 using System.Collections.Generic;
+using NRTyler.KSP.DeltaVMap.Core.Enums;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
 {
@@ -24,14 +25,16 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
     public class Orbit : SubwayStep
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Orbit"/> class.
+        /// Initializes a new instance of the <see cref="Orbit" /> class.
         /// </summary>
-        protected Orbit()
+        /// <param name="target">The <see cref="CelestialBody"/> that this information is dedicated to.</param>
+        public Orbit(CelestialBody target) : base(target)
         {
             Initialize();
         }
 
-        protected Dictionary<string, int> orbitalParameters;
+        private Dictionary<string, int> orbitalParameters;
+        private Dictionary<string, SubwayLine> detour;
 
         /// <summary>
         /// Gets or sets the orbital parameters that one should expect for after spending
@@ -48,22 +51,43 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         }
 
         /// <summary>
+        /// Gets or sets the point where a <see cref="SubwayLine"/> splits to provide 
+        /// access to one of the targeted <see cref="CelestialBody"/>'s moon(s).
+        /// </summary>
+        public virtual Dictionary<string, SubwayLine> Detour
+        {
+            get
+            {
+                return this.detour ?? (this.detour = new Dictionary<string, SubwayLine>());
+            }
+            set
+            {
+                this.detour = value;
+                OnPropertyChanged(nameof(Detour));
+            }
+        }
+
+        /// <summary>
         /// Grants the ability to set both the Apoapsis and Periapsis values at once. 
         /// </summary>
-        /// <param name="apoapsis">The apoapsis.</param>
-        /// <param name="periapsis">The periapsis.</param>
+        /// <param name="apoapsis">Sets the orbit's apoapsis.</param>
+        /// <param name="periapsis">Sets the orbit's periapsis.</param>
         public virtual void SetOrbitalParameters(int apoapsis, int periapsis)
         {
-            OrbitalParameters["Apoapsis"] = apoapsis;
+            OrbitalParameters["Apoapsis"]  = apoapsis;
             OrbitalParameters["Periapsis"] = periapsis;
         }
 
         /// <summary>
-        /// Initializes the "OrbitalParameters" property with a Dictionary that 
+        /// Sets the name of this <see cref="SubwayStep"/>, its <see cref="StepID"/>,
+        /// and initializes the "OrbitalParameters" property with a Dictionary that 
         /// already includes the required "Apoapsis" and "Periapsis" entries. 
         /// </summary>
         private void Initialize()
         {
+            Name   = "Orbit";
+            StepID = StepID.Orbit;
+
             OrbitalParameters = new Dictionary<string, int>
             {
                 {"Apoapsis", 0},
