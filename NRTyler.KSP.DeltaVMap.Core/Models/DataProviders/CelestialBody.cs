@@ -218,7 +218,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// <summary>
         /// Updates other relevant items should the <see cref="List{T}"/> of orbiting bodies be modified.
         /// </summary>
-        protected virtual void UpdateOrbitingBodiesInfo()
+        public void UpdateOrbitingBodiesInfo()
         {
             // If there are any bodies in the list, then this CelestialBody obviously has moon(s).
             // If it doesn't have any in the list, then it clearly has no moon(s).
@@ -244,97 +244,16 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// Changes various values of this <see cref="CelestialBody"/> to make it a star, and modifies other 
         /// <see cref="CelestialBody"/>'s to recognize that change.
         /// </summary>
-        protected virtual void SetValuesIfStar()
+        public void SetValuesIfStar()
         {
-            Host              = this;
-            HasAtmosphere     = true;
-            HasOrbitingBodies = true;
-            CanUseJets        = false;
-            IsHomeWorld       = false;
-
-            /*
-            #if !DEBUG
-            throw new NotImplementedException
-                ("You have to add all of the other Celestial Bodies to the moons list before continuing!");
-            #endif
-
-            if (OrbitingBodies.Count <= 0)
-            {
-                return;
-            }
-            foreach (var celestialBody in OrbitingBodies)
-            {
-                // Since this CelestialBody is now the star, it makes itself the host of every 
-                // other CelestialBody and makes sure to set their "IsStar" flag is false.
-                celestialBody.Host = this;
-                celestialBody.BodyType = BodyType.Planet;
-
-                if (celestialBody.OrbitingBodies.Contains(this))
-                {
-                    celestialBody.OrbitingBodies.Remove(this);
-                }
-            }
-            */
+            Host = this;
+            HasAtmosphere = true;
+            CanUseJets = false;
+            IsHomeWorld = false;
+            UpdateOrbitingBodiesInfo();
         }
-        
+
         #endregion
-
-
-        /// <summary>
-        /// Contains logic that only allows planets to be added 
-        /// to the <see cref="OrbitingBodies"/> <see cref="List{T}"/>.
-        /// </summary>
-        /// <param name="celestialBodies">The celestial bodies to validate.</param>
-        public virtual void AddPlanets(params CelestialBody[] celestialBodies)
-        {
-            // Only a star can have planets.
-            if (BodyType != BodyType.Star) return;
-
-            foreach (var celestialBody in celestialBodies)
-            {
-                // These values must be opposite of what they are now for the body being evaluated to pass.
-                var isPlanet = false;
-                var isDuplicate = true;
-
-                // Ensure it's a planet and that it's not already on the "OrbitingBodies" list.
-                if (celestialBody.BodyType == BodyType.Planet) isPlanet = true;
-                if (!OrbitingBodies.Contains(celestialBody)) isDuplicate = false;
-
-                // Must be a planet and not a duplicate.
-                if (isPlanet && !isDuplicate)
-                {
-                    OrbitingBodies.Add(celestialBody);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Contains logic that only allows moons to be added 
-        /// to the <see cref="OrbitingBodies"/> <see cref="List{T}"/>.
-        /// </summary>
-        /// <param name="celestialBodies">The celestial bodies to validate.</param>
-        public virtual void AddMoons(params CelestialBody[] celestialBodies)
-        {
-            // A star can't have moons.
-            if (BodyType == BodyType.Star) return;
-
-            foreach (var celestialBody in celestialBodies)
-            {
-                // These values must be opposite of what they are now for the body being evaluated to pass.
-                var isMoon = false;
-                var isDuplicate = true;
-
-                // Ensure it's a moon and that it's not already on the "OrbitingBodies" list.
-                if (celestialBody.BodyType == BodyType.Moon) isMoon = true;
-                if (!OrbitingBodies.Contains(celestialBody)) isDuplicate = false;
-
-                // Must be a moon and not a duplicate.
-                if (isMoon && !isDuplicate) 
-                {
-                    OrbitingBodies.Add(celestialBody);
-                }
-            }
-        }
 
         #region INotifyPropertyChanged Members
 

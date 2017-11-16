@@ -15,6 +15,7 @@ using System.IO;
 using NRTyler.CodeLibrary.Extensions;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
 using NRTyler.KSP.DeltaVMap.Core.Models;
+using NRTyler.KSP.DeltaVMap.Core.Models.DataControllers;
 using NRTyler.KSP.DeltaVMap.Core.Models.DataProviders;
 using NRTyler.KSP.DeltaVMap.Core.Repositories;
 
@@ -24,18 +25,27 @@ namespace TestAid
     {
         private static void Main()
         {
-            var body = Generate();
+            //var body = Generate();
 
-            var settings   = new ApplicationSettings();
-            var stream     = File.OpenWrite($"{settings.CelestialBodyLocation}/{body.Name.ToTitleCase()}.xml");
-            var repository = new CelestialBodyRepository();
+            //var settings = new ApplicationSettings();
+            //var stream = File.OpenWrite($"{settings.CelestialBodyLocation}/{body.Name.ToTitleCase()}.xml");
+            //var repository = new CelestialBodyRepository();
 
-            repository.Serialize(stream, body);
-            Console.WriteLine("Done");
+            //repository.Serialize(stream, body);
+            //Console.WriteLine("Done");
         }
 
         private static CelestialBody Generate()
         {
+            var kerbol = new CelestialBody
+            {
+                Name = "Kerbol",
+                BodyType = BodyType.Star,
+                IsHomeWorld = false,
+                HasAtmosphere = true,
+                CanUseJets = false,
+            };
+
             var kerbin = new CelestialBody
             {
                 Name          = "Kerbin",
@@ -63,9 +73,13 @@ namespace TestAid
                 CanUseJets    = false,
             };
 
-            kerbin.AddMoons(mun, minmus);
+            //var bodyEditorKerbin = new BodyEditor(kerbin);
+            //var bodyEditorKerbol = new BodyEditor(kerbol);
 
-            return kerbin;
+            //bodyEditorKerbin.AddMoons(mun, minmus);
+            //bodyEditorKerbol.AddPlanets(kerbin);
+
+            return minmus;
         }
     }
 }

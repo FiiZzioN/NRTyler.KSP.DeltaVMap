@@ -48,12 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\BodyType.cs" />
+    <Compile Include="Models\DataControllers\BodyEditor.cs" />
     <Compile Include="Models\DataProviders\Landing.cs" />
     <Compile Include="Models\DataProviders\Orbit.cs" />
     <Compile Include="Models\DataProviders\SubwayStep.cs" />
     <Compile Include="Enums\StepID.cs" />
     <Compile Include="EventArgs\BodyLoadedEventArgs.cs" />
-    <Compile Include="Models\DataControllers\BodyImplementer.cs" />
     <Compile Include="Models\DataProviders\CelestialBody.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\DataProviders\EllipticalOrbit.cs" />

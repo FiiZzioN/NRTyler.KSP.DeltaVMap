@@ -55,6 +55,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\DataControllers\BodyEditorTests.cs" />
     <Compile Include="Models\DataProviders\CelestialBodyTests.cs" />
     <Compile Include="Models\DataProviders\LandingTests.cs" />
     <Compile Include="Models\DataProviders\OrbitTests.cs" />

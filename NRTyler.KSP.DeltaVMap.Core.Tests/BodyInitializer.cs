@@ -1,12 +1,12 @@
-﻿// ************************************************************************
+﻿// ***********************************************************************
 // Assembly         : NRTyler.KSP.DeltaVMap.Core.Tests
-// 
+//
 // Author           : Nicholas Tyler
 // Created          : 11-08-2017
-// 
+//
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 11-08-2017
-// 
+// Last Modified On : 11-16-2017
+//
 // License          : MIT License
 // ***********************************************************************
 
@@ -19,87 +19,94 @@ using NRTyler.KSP.DeltaVMap.Core.Repositories;
 namespace NRTyler.KSP.DeltaVMap.Core.Tests
 {
     /// <summary>
-    /// A base class meant for <see langword="unit tests"/> that need a <see cref="Core.Models.DataProviders.CelestialBody"/>
-    /// initialized so various tests have something to work with.
+    /// A base class meant for <see langword="unit tests"/> that need a <see cref="CelestialBody"/>
+    /// such as a Star, Planet, or Moon initialized so various tests have something to work with.
     /// </summary>
     public abstract class BodyInitializer
     {
         #region Test Initialization
 
-        /// <summary>
-        /// The method that gets called after each test has been completed.
-        /// </summary>
-        [TestInitialize]
-        public virtual void SetupCelestialBody()
-        {
-            CelestialBody = CreateBody();
-        }
+            #region Infrastructure
 
-        /// <summary>
-        /// Creates a <see cref="Core.Models.DataProviders.CelestialBody"/> for any test that needs it.
-        /// The body that's automatically created is a Kerbin analog. Doesn't have a host set by default.
-        /// </summary>
-        /// <returns>The created body.</returns>
-        public virtual CelestialBody CreateBody()
-        {
-            // Load the settings, get the stream to the "Kerbin" XML file, and then deserialize it.
+            protected ApplicationSettings Settings { get; set; } = new ApplicationSettings();
+            protected CelestialBodyRepository Repository { get; set; } = new CelestialBodyRepository();
 
-            var settings   = new ApplicationSettings();
-            var stream     = File.OpenRead($"{settings.CelestialBodyLocation}/Kerbin.xml");                
-            var repository = new CelestialBodyRepository();
+            #endregion
 
-            return repository.Deserialize(stream);
-        }
+            #region Properties
 
-        #endregion
+            /// <summary>
+            /// Gets or sets the star that various <see langword="unit tests"/> can use.
+            /// </summary>
+            protected virtual CelestialBody Star { get; set; }
 
-        /// <summary>
-        /// Gets or sets the <see cref="Core.Models.DataProviders.CelestialBody"/> that's available for any test that needs it.
-        /// </summary>
-        public virtual CelestialBody CelestialBody { get; set; }
+            /// <summary>
+            /// Gets or sets the planet that various <see langword="unit tests"/> can use.
+            /// </summary>
+            protected virtual CelestialBody Planet { get; set; }
 
+            /// <summary>
+            /// Gets or sets the moon that various <see langword="unit tests"/> can use.
+            /// </summary>
+            protected virtual CelestialBody Moon { get; set; }
 
+            #endregion
 
+            #region CelestialBody Creation Methods
 
-
-
-        /*
-        #region Test Initialization
-
-        /// <summary>
-        /// The method that gets called after each test has been completed.
-        /// </summary>
-        [TestInitialize]
-        public virtual void SetupCelestialBody()
-        {
-            CelestialBody = CreateBody();
-        }
-
-        /// <summary>
-        /// Creates a <see cref="Core.Models.DataProviders.CelestialBody"/> for any test that needs it.
-        /// The body that's automatically created is a Kerbin analog, minus the moons.
-        /// </summary>
-        /// <returns>The created body.</returns>
-        public virtual CelestialBody CreateBody()
-        {
-            var body = new CelestialBody()
+            /// <summary>
+            /// Creates the star that's used in the test initializer.
+            /// </summary>
+            /// <returns>A <see cref="CelestialBody"/> that's marked as a star.</returns>
+            protected virtual CelestialBody CreateStar()
             {
-                Name = "Kerbin",
-                BodyType = BodyType.Planet,
-                IsHomeWorld = true,
-                HasAtmosphere = true,
-                CanUseJets = true,
-            };
+                // Get the file stream to the "Kerbol" XML file, and then deserialize it.
+                var stream = File.OpenRead($"{Settings.TestCelestialBodyLocation}/Kerbol.xml");
 
-            return body;
-        }
+                return Repository.Deserialize(stream);
+            }
+
+            /// <summary>
+            /// Creates the planet that's used in the test initializer.
+            /// </summary>
+            /// <returns>A <see cref="CelestialBody"/> that's marked as a planet.</returns>
+            protected virtual CelestialBody CreatePlanet()
+            {
+                // Get the file stream to the "Kerbin" XML file, and then deserialize it.
+                var stream = File.OpenRead($"{Settings.TestCelestialBodyLocation}/Kerbin.xml");
+
+                return Repository.Deserialize(stream);
+            }
+
+            /// <summary>
+            /// Creates the moon that's used in the test initializer.
+            /// </summary>
+            /// <returns>A <see cref="CelestialBody"/> that's marked as a moon.</returns>
+            protected virtual CelestialBody CreateMoon()
+            {
+                // Get the file stream to the "Mun" XML file, and then deserialize it.
+                var stream = File.OpenRead($"{Settings.TestCelestialBodyLocation}/Mun.xml");
+
+                return Repository.Deserialize(stream);
+            }
+
+            #endregion
+
+            #region Initializer
+
+            /// <summary>
+            /// The method that gets called after each test has been completed.
+            /// </summary>
+            [TestInitialize]
+            public virtual void SetupCelestialBodies()
+            {
+                Star = CreateStar();
+                Planet = CreatePlanet();
+                Moon = CreateMoon();
+            }
+
+            #endregion
 
         #endregion
-
-        /// <summary>
-        /// Gets or sets the <see cref="Core.Models.DataProviders.CelestialBody"/> that's available for any test that needs it.
-        /// </summary>
-        public virtual CelestialBody CelestialBody { get; set; }
-        */
     }
 }

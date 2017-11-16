@@ -1,98 +1,24 @@
-﻿// ************************************************************************
+﻿// ***********************************************************************
 // Assembly         : NRTyler.KSP.DeltaVMap.Core.Tests
-// 
+//
 // Author           : Nicholas Tyler
 // Created          : 10-27-2017
-// 
+//
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 10-27-2017
-// 
+// Last Modified On : 11-16-2017
+//
 // License          : MIT License
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
-using NRTyler.KSP.DeltaVMap.Core.Models.DataProviders;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
 {
     [TestClass]
-    public class CelestialBodyTests
+    public class CelestialBodyTests : BodyInitializer
     {
-        #region Test Initialization
-
-        [TestInitialize]
-        public void SetupCelestialBodies()
-        {
-            Star   = CreateStar();
-            Planet = CreatePlanet();
-            Moon   = CreateMoon();
-
-            SolarSystem = InstantiateSolarSystem();
-        }
-
-        public static CelestialBody CreateStar()
-        {
-            var star = new CelestialBody
-            {
-                Name = "Kerbol",
-                BodyType = BodyType.Star,
-                IsHomeWorld = false,
-                HasAtmosphere = true,
-                CanUseJets = false,
-            };
-
-            return star;
-        }
-
-        public static CelestialBody CreatePlanet()
-        {
-            var planet = new CelestialBody()
-            {
-                Name = "Kerbin",
-                BodyType = BodyType.Planet,
-                IsHomeWorld = true,
-                HasAtmosphere = true,
-                CanUseJets = true,            
-            };
-
-            return planet;
-        }
-
-        public static CelestialBody CreateMoon()
-        {
-            var moon = new CelestialBody()
-            {
-                Name = "Mun",
-                BodyType = BodyType.Moon,
-                IsHomeWorld = false,
-                HasAtmosphere = false,
-                CanUseJets = false,
-            };
-
-            return moon;
-        }
-
-        public static List<CelestialBody> InstantiateSolarSystem()
-        {
-            return new List<CelestialBody>()
-            {
-                Star,
-                Planet,
-                Moon
-            };
-        }
-
-        #endregion
-
-        public static List<CelestialBody> SolarSystem { get; set; }
-        public static CelestialBody Star { get; set; }
-        public static CelestialBody Planet { get; set; }
-        public static CelestialBody Moon { get; set; }
-
-
         [TestMethod]
         public void NameTesting()
         {
@@ -168,53 +94,6 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
             Planet.CanUseJets = false;
             Assert.IsFalse(Planet.CanUseJets);
             Assert.IsTrue(Planet.HasAtmosphere);
-        }
-
-
-        [TestMethod]
-        public void AddPlanetsBasicTest()
-        {
-            // A star can only have planets, not moons. This means we expect only 
-            // one object orbiting it and that it shows it has an orbiting body.
-            Star.AddPlanets(Planet, Moon);
-            Assert.IsTrue(Star.HasOrbitingBodies);
-            Assert.AreEqual(1, Star.NumberOfOrbitingBodies);
-            CollectionAssert.Contains(Star.OrbitingBodies, Planet);
-        }
-
-        [TestMethod]
-        public void AddPlanetsDuplicateTest()
-        {
-            // A star can only have planets, not moons. This means we expect only 
-            // one object orbiting it and that it shows it has an orbiting body.
-            // There should only be one planet since the others are duplicates.
-            Star.AddPlanets(Planet, Moon, Planet, Planet);
-            Assert.IsTrue(Star.HasOrbitingBodies);
-            Assert.AreEqual(1, Star.NumberOfOrbitingBodies);
-            CollectionAssert.Contains(Star.OrbitingBodies, Planet);
-        }
-
-        [TestMethod]
-        public void AddMoonsBasicTest()
-        {
-            // A planet can only have moons, not stars or other planets. This means we 
-            // expect only one object orbiting it and that it shows it has an orbiting body.
-            Planet.AddMoons(Moon, Star, Planet);
-            Assert.IsTrue(Planet.HasOrbitingBodies);
-            Assert.AreEqual(1, Planet.NumberOfOrbitingBodies);
-            CollectionAssert.Contains(Planet.OrbitingBodies, Moon);
-        }
-
-        [TestMethod]
-        public void AddMoonsDuplicateTest()
-        {
-            // A planet can only have moons, not stars or other planets. This means we 
-            // expect only one object orbiting it and that it shows it has an orbiting body.
-            // There should only be one moon since the others are duplicates.
-            Planet.AddMoons(Moon, Star, Moon, Planet);
-            Assert.IsTrue(Planet.HasOrbitingBodies);
-            Assert.AreEqual(1, Planet.NumberOfOrbitingBodies);
-            CollectionAssert.Contains(Planet.OrbitingBodies, Moon);
         }
 
         [TestMethod]

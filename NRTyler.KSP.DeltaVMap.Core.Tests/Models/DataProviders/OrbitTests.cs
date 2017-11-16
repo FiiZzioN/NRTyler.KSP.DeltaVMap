@@ -1,12 +1,12 @@
-﻿// ************************************************************************
+﻿// ***********************************************************************
 // Assembly         : NRTyler.KSP.DeltaVMap.Core.Tests
-// 
+//
 // Author           : Nicholas Tyler
 // Created          : 11-08-2017
-// 
+//
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 11-08-2017
-// 
+// Last Modified On : 11-16-2017
+//
 // License          : MIT License
 // ***********************************************************************
 
@@ -23,7 +23,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
         [TestMethod]
         public void OrbitCreationTests()
         {
-            var orbit = new Orbit(CelestialBody);
+            var orbit = new Orbit(Planet);
 
             // The steps name should be "Orbit" since it's an Orbit.
             // This is the orbit class, so the StepID should be "Orbit".
@@ -38,7 +38,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
         [TestMethod]
         public void OrbitParameterChange()
         {
-            var orbit = new Orbit(CelestialBody);
+            var orbit = new Orbit(Moon);
             orbit.SetOrbitalParameters(140, 139);
 
             // The Apoapsis should be 140 while the Periapsis should be 139 respectively.
