@@ -11,6 +11,7 @@
 // ***********************************************************************
 
 using System;
+using NRTyler.CodeLibrary.Extensions;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
@@ -24,7 +25,10 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// <param name="target">The <see cref="CelestialBody"/> that this landing information is meant for.</param>
         public Landing(CelestialBody target) : base(target)
         {
-            Initialize();
+            StepID = StepID.Landing;
+            Name   = StepID.GetStringValue();
+
+            CanUseParachutes = CheckForAtmosphere();
         }
 
         private bool canUseParachutes;
@@ -53,18 +57,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// </returns>
         private bool CheckForAtmosphere()
         {
-            return base.Target.HasAtmosphere;
-        }
-
-        /// <summary>
-        /// Sets the name of this <see cref="SubwayStep"/>, its <see cref="StepID"/>,
-        /// and checks to see if we can use parachutes to aid in the landing efforts.
-        /// </summary>
-        private void Initialize()
-        {
-            Name   = "Landing";
-            StepID = StepID.Landing;
-            CanUseParachutes = CheckForAtmosphere();
+            return Target.HasAtmosphere;
         }
     }
 }

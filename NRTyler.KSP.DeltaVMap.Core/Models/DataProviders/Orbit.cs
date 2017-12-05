@@ -12,6 +12,7 @@
 
 using System;
 using System.Collections.Generic;
+using NRTyler.CodeLibrary.Extensions;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
@@ -85,8 +86,8 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// </summary>
         private void Initialize()
         {
-            Name   = "Orbit";
             StepID = StepID.Orbit;
+            Name   = StepID.GetStringValue();
 
             OrbitalParameters = new Dictionary<string, int>
             {

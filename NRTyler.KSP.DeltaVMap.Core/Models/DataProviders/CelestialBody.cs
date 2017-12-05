@@ -26,6 +26,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
     /// and their stars that can be used on a delta-v plot.
     /// </summary>
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    [Serializable]
     [DataContract(Name = "CelestialBody")]
     public class CelestialBody : INotifyPropertyChanged//, IXmlSerializable
     {

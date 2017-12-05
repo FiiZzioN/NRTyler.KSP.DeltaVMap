@@ -10,6 +10,7 @@
 // License          : MIT License
 // ***********************************************************************
 
+using NRTyler.CodeLibrary.Extensions;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
@@ -23,6 +24,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         public Intercept(CelestialBody target) : base(target)
         {
             StepID = StepID.Intercept;
+            Name   = StepID.GetStringValue();
         }
 
         private int timeUntilIntercept;

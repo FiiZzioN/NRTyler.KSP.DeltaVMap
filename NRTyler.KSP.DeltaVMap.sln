@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRTyler.KSP.DeltaVMap.WPF", "NRTyler.KSP.DeltaVMap.WPF\NRTyler.KSP.DeltaVMap.WPF.csproj", "{D33738C0-A730-42BE-B1C3-656E93F119B3}"
 EndProject

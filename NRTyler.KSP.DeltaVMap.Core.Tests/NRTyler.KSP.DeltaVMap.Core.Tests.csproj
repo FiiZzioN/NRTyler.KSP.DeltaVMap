@@ -55,9 +55,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DummyObjects\SubwayStepDummy.cs" />
     <Compile Include="Models\DataControllers\BodyEditorTests.cs" />
     <Compile Include="Models\DataProviders\CelestialBodyTests.cs" />
     <Compile Include="Models\DataProviders\LandingTests.cs" />
+    <Compile Include="Models\DataProviders\LineInformationTests.cs" />
     <Compile Include="Models\DataProviders\OrbitTests.cs" />
     <Compile Include="Models\DataProviders\SubwayStepTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

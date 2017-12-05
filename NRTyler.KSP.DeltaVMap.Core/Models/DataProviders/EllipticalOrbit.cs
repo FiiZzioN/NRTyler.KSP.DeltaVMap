@@ -12,6 +12,7 @@
 
 using System;
 using System.ComponentModel;
+using NRTyler.CodeLibrary.Extensions;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
@@ -30,6 +31,8 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         public EllipticalOrbit(CelestialBody target) : base(target)
         {
             StepID = StepID.EllipticalOrbit;
+            Name   = StepID.GetStringValue();
+
             CanAeroBrake = CheckForAtmosphere();
         }
 

@@ -31,7 +31,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataControllers
         /// <summary>
         /// Gets the <see cref="CelestialBody"/> that's being edited.
         /// </summary>
-        private CelestialBody BodyBeingEdited { get; }
+        public CelestialBody BodyBeingEdited { get; }
 
         #region Methods
 
