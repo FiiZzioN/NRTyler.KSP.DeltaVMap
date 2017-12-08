@@ -5,7 +5,7 @@
 // Created          : 11-08-2017
 //
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 11-16-2017
+// Last Modified On : 12-08-2017
 //
 // License          : MIT License
 // ***********************************************************************
@@ -100,9 +100,9 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests
             [TestInitialize]
             public virtual void SetupCelestialBodies()
             {
-                Star = CreateStar();
+                Star   = CreateStar();
                 Planet = CreatePlanet();
-                Moon = CreateMoon();
+                Moon   = CreateMoon();
             }
 
             #endregion

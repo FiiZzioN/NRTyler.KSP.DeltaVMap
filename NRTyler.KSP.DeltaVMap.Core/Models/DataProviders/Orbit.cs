@@ -5,14 +5,13 @@
 // Created          : 10-30-2017
 //
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 11-04-2017
+// Last Modified On : 12-08-2017
 //
 // License          : MIT License
 // ***********************************************************************
 
 using System;
 using System.Collections.Generic;
-using NRTyler.CodeLibrary.Extensions;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
@@ -29,7 +28,17 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// Initializes a new instance of the <see cref="Orbit" /> class.
         /// </summary>
         /// <param name="target">The <see cref="CelestialBody"/> that this information is dedicated to.</param>
-        public Orbit(CelestialBody target) : base(target)
+        public Orbit(CelestialBody target) : base(target, StepID.Orbit)
+        {
+            Initialize();
+        }
+
+        /// <summary>
+        /// Made specifically for the <see cref="EllipticalOrbit"/> class that inherits from <see cref="Orbit"/>.
+        /// </summary>
+        /// <param name="target">The <see cref="CelestialBody" /> that this information is dedicated to.</param>
+        /// <param name="stepID">The <see cref="Enums.StepID"/> that represents what type of SubwayStep this is.</param>
+        protected Orbit(CelestialBody target, StepID stepID) : base(target, stepID)
         {
             Initialize();
         }
@@ -80,15 +89,11 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         }
 
         /// <summary>
-        /// Sets the name of this <see cref="SubwayStep"/>, its <see cref="StepID"/>,
-        /// and initializes the "OrbitalParameters" property with a Dictionary that 
+        /// Initializes the "OrbitalParameters" property with a Dictionary that 
         /// already includes the required "Apoapsis" and "Periapsis" entries. 
         /// </summary>
         private void Initialize()
         {
-            StepID = StepID.Orbit;
-            Name   = StepID.GetStringValue();
-
             OrbitalParameters = new Dictionary<string, int>
             {
                 {"Apoapsis", 0},

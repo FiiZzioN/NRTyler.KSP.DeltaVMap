@@ -23,11 +23,8 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// Initializes a new instance of the <see cref="Landing"/> class.
         /// </summary>
         /// <param name="target">The <see cref="CelestialBody"/> that this landing information is meant for.</param>
-        public Landing(CelestialBody target) : base(target)
+        public Landing(CelestialBody target) : base(target, StepID.Landing)
         {
-            StepID = StepID.Landing;
-            Name   = StepID.GetStringValue();
-
             CanUseParachutes = CheckForAtmosphere();
         }
 

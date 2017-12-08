@@ -5,14 +5,12 @@
 // Created          : 10-30-2017
 //
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 11-04-2017
+// Last Modified On : 12-08-2017
 //
 // License          : MIT License
 // ***********************************************************************
 
 using System;
-using System.ComponentModel;
-using NRTyler.CodeLibrary.Extensions;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
@@ -28,11 +26,8 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// Initializes a new instance of the <see cref="EllipticalOrbit"/> class.
         /// </summary>
         /// <param name="target">The <see cref="CelestialBody"/> that this information is dedicated to.</param>
-        public EllipticalOrbit(CelestialBody target) : base(target)
+        public EllipticalOrbit(CelestialBody target) : base(target, StepID.EllipticalOrbit)
         {
-            StepID = StepID.EllipticalOrbit;
-            Name   = StepID.GetStringValue();
-
             CanAeroBrake = CheckForAtmosphere();
         }
 

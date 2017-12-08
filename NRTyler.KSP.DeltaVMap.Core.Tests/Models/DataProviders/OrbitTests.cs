@@ -5,13 +5,14 @@
 // Created          : 11-08-2017
 //
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 11-16-2017
+// Last Modified On : 12-08-2017
 //
 // License          : MIT License
 // ***********************************************************************
 
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NRTyler.CodeLibrary.Utilities;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
 using NRTyler.KSP.DeltaVMap.Core.Models.DataProviders;
 
@@ -21,16 +22,20 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
     public class OrbitTests : BodyInitializer
     {
         [TestMethod]
-        public void OrbitCreationTests()
+        public void OrbitInitialization()
         {
             var orbit = new Orbit(Planet);
 
-            // The steps name should be "Orbit" since it's an Orbit.
-            // This is the orbit class, so the StepID should be "Orbit".
-            // The orbital parameters should be zero since they haven't been set yet.
+            // Assert that the target objects are the same;
+            Assert.IsTrue(Planet.CompareObject(orbit.Target));
 
-            Assert.AreEqual("Orbit", orbit.Name);
+            // Assert that the 'StepName' is correct.
+            Assert.AreEqual("Kerbin Orbit", orbit.StepName);
+
+            // Assert that the 'StepID' is 'Orbit' since this is the Orbit class.
             Assert.AreEqual(StepID.Orbit, orbit.StepID);
+
+            // Assert that the 'OrbitalParameters' dictionary has been instantiated.
             Assert.AreEqual(0, orbit.OrbitalParameters["Apoapsis"]);
             Assert.AreEqual(0, orbit.OrbitalParameters["Periapsis"]);
         }

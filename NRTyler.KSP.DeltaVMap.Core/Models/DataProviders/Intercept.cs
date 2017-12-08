@@ -21,16 +21,16 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// Initializes a new instance of the <see cref="Intercept"/> class.
         /// </summary>
         /// <param name="target">The <see cref="CelestialBody"/> that this information is dedicated to.</param>
-        public Intercept(CelestialBody target) : base(target)
+        public Intercept(CelestialBody target) : base(target, StepID.Intercept)
         {
-            StepID = StepID.Intercept;
-            Name   = StepID.GetStringValue();
+
         }
 
         private int timeUntilIntercept;
 
         /// <summary>
         /// Gets or sets the time until you'll intercept the targeted <see cref="CelestialBody"/>.
+        /// Values should be in hours.
         /// </summary>
         public int TimeUntilIntercept
         {

@@ -5,7 +5,7 @@
 // Created          : 10-30-2017
 //
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 11-26-2017
+// Last Modified On : 12-08-2017
 //
 // License          : MIT License
 // ***********************************************************************
@@ -13,43 +13,36 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using NRTyler.CodeLibrary.Annotations;
+using NRTyler.CodeLibrary.Extensions;
 using NRTyler.CodeLibrary.Utilities;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
 {
     /// <summary>
-    /// A base class that defines specific information about a given step on the <see cref="SubwayLine"/>.
+    /// A base class that defines specific information about a given step on a <see cref="SubwayLine"/>.
     /// </summary>
     [Serializable]
     [DataContract(Name = "SubwayStep")]
     public abstract class SubwayStep : INotifyPropertyChanged
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubwayStep" /> class.
+        /// Initializes a new instance of the <see cref="SubwayStep"/> class.
         /// </summary>
-        /// <param name="target">The <see cref="CelestialBody"/> that this information is dedicated to.</param>
-        protected SubwayStep(CelestialBody target) : this(target, target.Name)
+        /// <param name="target">The <see cref="CelestialBody"/> that this SubwayStep is dedicated to.</param>
+        /// <param name="stepID">The <see cref="Enums.StepID"/> that represents what type of SubwayStep this is.</param>
+        protected SubwayStep(CelestialBody target, StepID stepID)
         {
-
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubwayStep" /> class.
-        /// </summary>
-        /// <param name="target">The <see cref="CelestialBody"/> that this information is dedicated to.</param>
-        /// <param name="name">The name of this specific <see cref="SubwayStep" />.</param>
-        protected SubwayStep(CelestialBody target, string name)
-        {
-            Initialize(target, name);
+            Initialize(target, stepID);
         }
 
         #region Fields and Properties
 
-        private string name;
+        private string stepName;
         private CelestialBody target;
         private StepID stepID;
         private Dictionary<string, double> energyRequired;
@@ -58,15 +51,15 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         /// Gets or sets the name of this specific <see cref="SubwayStep"/>.
         /// </summary>
         [DataMember]
-        public virtual string Name
+        public virtual string StepName
         {
-            get { return this.name; }
+            get { return this.stepName; }
             set
             {
                 if (String.IsNullOrWhiteSpace(value)) return;
 
-                this.name = value;
-                OnPropertyChanged(nameof(Name));
+                this.stepName = value;
+                OnPropertyChanged(nameof(StepName));
             }
         }
 
@@ -132,6 +125,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
 
         /// <summary>
         /// Grants the ability to set all three possible energy required values at once. 
+        /// The average is automatically calculated using the minimum and maximum values.
         /// </summary>
         /// <param name="minimum">The minimum amount of energy required to get to your destination.</param>
         /// <param name="maximum">The maximum amount of energy required to get to your destination.</param>
@@ -139,7 +133,6 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         {
             EnergyRequired["Minimum"] = minimum;
             EnergyRequired["Maximum"] = maximum;
-
             EnergyRequired["Average"] = GetAverage();
 
         }
@@ -154,7 +147,6 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
         {
             EnergyRequired["Minimum"] = energy;
             EnergyRequired["Maximum"] = energy;
-
             EnergyRequired["Average"] = energy;
         }
 
@@ -167,19 +159,35 @@ namespace NRTyler.KSP.DeltaVMap.Core.Models.DataProviders
             var minimum = EnergyRequired["Minimum"];
             var maximum = EnergyRequired["Maximum"];
 
-            return ((minimum + maximum) / 2);
+            // Get's the average.
+            var average = ((minimum + maximum) / 2);
+
+            // Rounds the average to two decimal places.
+            var roundedValue = Math.Round(average, 2);
+
+            return roundedValue;
         }
 
         /// <summary>
-        /// Initializes the class's 'Target' and 'Name' properties. This also instantiates the
+        /// Initializes the class's 'Target' and 'StepName' properties. This also instantiates the
         /// 'EnergyRequired' property with a Dictionary that already includes the required 
         /// "Minimum", "Average", and "Maximum" entries. 
         /// </summary>
-        private void Initialize(CelestialBody target, string name)
+        [SuppressMessage("ReSharper", "ParameterHidesMember")]
+        private void Initialize(CelestialBody target, StepID stepID)
         {
-            Name   = String.IsNullOrWhiteSpace(name) ? "Invalid Name" : name;
+            // Set the 'Target' and 'StepName' properties.
             Target = target;
+            StepID = stepID;
 
+            // Fields for better readability in the '?:' expression.
+            var invalidName = "Invalid Step Name";
+            var validName   = $"{Target.Name} {StepID.GetStringValue()}";
+
+            // Set the 'StepName'
+            StepName = String.IsNullOrWhiteSpace(target.Name) ? invalidName : validName;
+            
+            // Instantiate the 'EnergyRequired' dictionary.
             EnergyRequired = new Dictionary<string, double>
             {
                 {"Minimum", 0},

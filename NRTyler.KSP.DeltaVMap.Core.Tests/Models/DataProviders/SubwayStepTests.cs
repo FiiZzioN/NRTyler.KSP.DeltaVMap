@@ -1,12 +1,12 @@
-﻿// ************************************************************************
+﻿// ***********************************************************************
 // Assembly         : NRTyler.KSP.DeltaVMap.Core.Tests
-// 
+//
 // Author           : Nicholas Tyler
 // Created          : 11-08-2017
-// 
+//
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 11-08-2017
-// 
+// Last Modified On : 12-08-2017
+//
 // License          : MIT License
 // ***********************************************************************
 
@@ -14,7 +14,6 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NRTyler.CodeLibrary.Utilities;
 using NRTyler.KSP.DeltaVMap.Core.Enums;
-using NRTyler.KSP.DeltaVMap.Core.Models.DataProviders;
 using NRTyler.KSP.DeltaVMap.Core.Tests.DummyObjects;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
@@ -26,15 +25,15 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
         public void SubwayStep_ValidConstructors()
         {
             // Get two objects, each using a different constructor.
-            var dummyOne = new SubwayStepDummy(Planet);
-            var dummyTwo = new SubwayStepDummy(Moon, Moon.Name);
-
+            var dummyOne = new SubwayStepDummy(Planet, StepID.Orbit);
+            var dummyTwo = new SubwayStepDummy(Moon, StepID.Intercept);
+            
             // Check the first dummy's name and target to see if the assignment is correct.
-            Assert.AreEqual(Planet.Name, dummyOne.Name);
+            Assert.AreEqual($"{Planet.Name} Orbit", dummyOne.StepName);
             Assert.IsTrue(dummyOne.Target.CompareObject(Planet));
 
             // Check the second dummy's name and target to see if the assignment is correct.
-            Assert.AreEqual(Moon.Name, dummyTwo.Name);
+            Assert.AreEqual($"{Moon.Name} Intercept", dummyTwo.StepName);
             Assert.IsTrue(dummyTwo.Target.CompareObject(Moon));
         }
 
@@ -42,15 +41,8 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
         public void SubwayStep_StepID()
         {
             // Set the two objects 'StepID' properties.
-            var dummyOne = new SubwayStepDummy(Planet)
-            {
-                StepID = StepID.Intercept,
-            };
-
-            var dummyTwo = new SubwayStepDummy(Star)
-            {
-                StepID = StepID.EllipticalOrbit,
-            };
+            var dummyOne = new SubwayStepDummy(Planet, StepID.Intercept);
+            var dummyTwo = new SubwayStepDummy(Star, StepID.EllipticalOrbit);
 
             // Check the first dummy's StepID.
             Assert.AreEqual(StepID.Intercept, dummyOne.StepID);
@@ -63,10 +55,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
         public void SubwayStep_SetEnergyMinMax()
         {
             // Set up the object and its StepID.
-            var dummyOne = new SubwayStepDummy(Moon)
-            {
-                StepID = StepID.Intercept,
-            };
+            var dummyOne = new SubwayStepDummy(Moon, StepID.Intercept);
 
             // Fields for easier asserts since I don't have to type each value multiple times.
             double min;
@@ -114,10 +103,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests.Models.DataProviders
         public void SubwayStep_SetEnergyOneValue()
         {
             // Set up the object and its StepID.
-            var dummyOne = new SubwayStepDummy(Star)
-            {
-                StepID = StepID.Orbit,
-            };
+            var dummyOne = new SubwayStepDummy(Star, StepID.Orbit);
 
             // Field for easier asserts since I don't have to type the value multiple times.
             var value = 9350;

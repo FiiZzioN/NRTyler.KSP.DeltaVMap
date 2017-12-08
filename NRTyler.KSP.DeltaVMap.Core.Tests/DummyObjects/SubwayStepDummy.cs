@@ -10,6 +10,7 @@
 // License          : MIT License
 // ***********************************************************************
 
+using NRTyler.KSP.DeltaVMap.Core.Enums;
 using NRTyler.KSP.DeltaVMap.Core.Models.DataProviders;
 
 namespace NRTyler.KSP.DeltaVMap.Core.Tests.DummyObjects
@@ -21,12 +22,7 @@ namespace NRTyler.KSP.DeltaVMap.Core.Tests.DummyObjects
     /// <seealso cref="NRTyler.KSP.DeltaVMap.Core.Models.DataProviders.SubwayStep" />
     public class SubwayStepDummy : SubwayStep 
     {
-        public SubwayStepDummy(CelestialBody target) : this(target, target.Name)
-        {
-
-        }
-
-        public SubwayStepDummy(CelestialBody target, string name) : base(target, name)
+        public SubwayStepDummy(CelestialBody target, StepID stepID) : base(target, stepID)
         {
 
         }
